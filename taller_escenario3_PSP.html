@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Taller · PSP Escenario 3 · Estimación y Calidad</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+/* ── RESET & BASE ─────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --bg: #f5f4f0;
+  --surface: #ffffff;
+  --surface2: #f0ede8;
+  --border: #d8d3cc;
+  --accent: #1a3a6e;
+  --accent2: #c8841a;
+  --accent3: #1a6e42;
+  --accent4: #b03030;
+  --text: #1a1814;
+  --muted: #6b6560;
+  --teal: #1a5f6e;
+}
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  line-height: 1.7;
+}
+a { color: var(--accent); }
+
+/* ── NAV TABS ─────────────────────────────────── */
+.nav-tabs {
+  position: sticky; top: 0; z-index: 100;
+  background: var(--accent);
+  display: flex; gap: 0;
+  border-bottom: 3px solid var(--accent2);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.18);
+}
+.nav-tab {
+  padding: 14px 28px;
+  color: rgba(255,255,255,0.65);
+  font-family: 'Syne', sans-serif;
+  font-size: 13px; font-weight: 600;
+  cursor: pointer;
+  border: none; background: none;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -3px;
+  transition: all .2s;
+  letter-spacing: .03em;
+  white-space: nowrap;
+}
+.nav-tab:hover { color: rgba(255,255,255,0.9); background: rgba(255,255,255,0.06); }
+.nav-tab.active { color: #fff; border-bottom-color: var(--accent2); background: rgba(255,255,255,0.1); }
+.nav-label { font-size: 10px; display: block; opacity: .7; font-family: 'DM Mono', monospace; text-transform: uppercase; letter-spacing: .08em; }
+
+/* ── PAGES ────────────────────────────────────── */
+.page { display: none; }
+.page.active { display: block; }
+
+/* ── HERO ─────────────────────────────────────── */
+.hero {
+  background: var(--accent);
+  color: #fff;
+  padding: 56px 48px 48px;
+  position: relative; overflow: hidden;
+}
+.hero::after {
+  content: 'PSP';
+  position: absolute; right: 40px; bottom: -20px;
+  font-family: 'Syne', sans-serif; font-size: 120px; font-weight: 800;
+  color: rgba(255,255,255,0.05); pointer-events: none; line-height: 1;
+}
+.hero-kicker {
+  font-family: 'DM Mono', monospace; font-size: 11px;
+  text-transform: uppercase; letter-spacing: .12em;
+  color: rgba(255,255,255,0.55); margin-bottom: 14px;
+}
+.hero h1 {
+  font-family: 'Syne', sans-serif; font-size: clamp(26px, 4vw, 44px);
+  font-weight: 800; line-height: 1.1; margin-bottom: 16px;
+}
+.hero h1 em { color: var(--accent2); font-style: normal; }
+.hero-sub { color: rgba(255,255,255,0.72); font-size: 15px; max-width: 580px; margin-bottom: 32px; }
+.hero-chips { display: flex; flex-wrap: wrap; gap: 10px; }
+.chip {
+  display: flex; align-items: center; gap: 7px;
+  background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 8px; padding: 7px 14px;
+  font-size: 13px; color: rgba(255,255,255,0.88);
+}
+.chip strong { color: #fff; font-family: 'Syne', sans-serif; }
+
+/* ── CONTAINER ────────────────────────────────── */
+.container { max-width: 820px; margin: 0 auto; padding: 48px 28px 80px; }
+
+/* ── WELCOME BOX ──────────────────────────────── */
+.welcome-box {
+  background: var(--surface);
+  border: 2px solid var(--accent);
+  border-radius: 16px;
+  padding: 28px 32px;
+  margin-bottom: 32px;
+}
+.welcome-box h2 {
+  font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700;
+  color: var(--accent); margin-bottom: 12px;
+}
+.welcome-box p { color: var(--muted); font-size: 14.5px; margin-bottom: 10px; }
+.welcome-box p:last-child { margin-bottom: 0; }
+.welcome-box strong { color: var(--text); }
+
+/* ── RECOMENDACIONES ──────────────────────────── */
+.reco-box {
+  background: #fff8ed;
+  border: 1.5px solid #e8c87a;
+  border-radius: 12px;
+  padding: 20px 24px;
+  margin-bottom: 32px;
+}
+.reco-box h3 {
+  font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700;
+  color: var(--accent2); margin-bottom: 12px; text-transform: uppercase; letter-spacing: .06em;
+}
+.reco-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.reco-list li {
+  display: flex; gap: 10px; align-items: flex-start;
+  font-size: 14px; color: #5a4a1a;
+}
+.reco-list li::before { content: '→'; color: var(--accent2); font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+.reco-list li strong { color: #3a2e0a; }
+
+/* ── PASO CARD ────────────────────────────────── */
+.paso {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  margin-bottom: 24px;
+  overflow: hidden;
+}
+.paso-header {
+  display: flex; align-items: center; gap: 16px;
+  padding: 18px 24px;
+  border-bottom: 1.5px solid var(--border);
+  background: var(--surface2);
+}
+.paso-num {
+  width: 38px; height: 38px; border-radius: 50%;
+  background: var(--accent); color: #fff;
+  font-family: 'Syne', sans-serif; font-weight: 800; font-size: 16px;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.paso-num.verde { background: var(--accent3); }
+.paso-num.naranja { background: var(--accent2); }
+.paso-num.rojo { background: var(--accent4); }
+.paso-num.gris { background: var(--muted); }
+.paso-title { font-family: 'Syne', sans-serif; font-weight: 700; font-size: 16px; }
+.paso-time {
+  margin-left: auto;
+  font-family: 'DM Mono', monospace; font-size: 11px;
+  color: var(--muted); text-transform: uppercase; letter-spacing: .08em;
+  background: var(--bg); border: 1px solid var(--border);
+  padding: 3px 10px; border-radius: 20px; white-space: nowrap;
+}
+.paso-body { padding: 24px 28px; }
+.paso-body p { font-size: 14.5px; color: var(--muted); margin-bottom: 12px; }
+.paso-body p strong { color: var(--text); }
+.paso-body ul, .paso-body ol { padding-left: 22px; margin-bottom: 14px; }
+.paso-body li { font-size: 14px; color: var(--muted); margin-bottom: 5px; }
+.paso-body li strong { color: var(--text); }
+
+/* ── REF PILL ─────────────────────────────────── */
+.ref-pill {
+  display: inline-flex; align-items: center; gap: 7px;
+  background: #e8f0fe; border: 1.5px solid #a8c4fa;
+  border-radius: 8px; padding: 6px 14px;
+  font-size: 13px; color: var(--accent);
+  font-weight: 500; margin: 4px 0; cursor: pointer;
+  text-decoration: none; transition: background .15s;
+}
+.ref-pill:hover { background: #d0e0fd; }
+.ref-pill-green {
+  background: #e6f4ee; border-color: #90d4b0; color: var(--accent3);
+}
+.ref-pill-green:hover { background: #cde8da; }
+
+/* ── INSTRUCCIÓN DE ACCIÓN ────────────────────── */
+.accion {
+  background: var(--accent);
+  color: #fff;
+  border-radius: 10px;
+  padding: 14px 18px;
+  font-size: 14px;
+  margin: 16px 0;
+  display: flex; gap: 10px; align-items: flex-start;
+}
+.accion-icon { font-size: 18px; flex-shrink: 0; }
+.accion-text { line-height: 1.55; }
+.accion-text strong { color: var(--accent2); }
+
+/* ── TABLA PARA DILIGENCIAR ───────────────────── */
+.table-wrap { overflow-x: auto; margin: 16px 0; border-radius: 10px; border: 1.5px solid var(--border); }
+table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+th {
+  background: var(--accent);
+  color: #fff;
+  padding: 11px 14px;
+  text-align: left;
+  font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 600;
+  white-space: nowrap;
+}
+td {
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+  color: var(--muted);
+}
+tr:last-child td { border-bottom: none; }
+.td-vacio {
+  background: repeating-linear-gradient(
+    -45deg, transparent, transparent 4px, rgba(0,0,0,0.025) 4px, rgba(0,0,0,0.025) 5px
+  );
+  color: #b0aaa5; font-style: italic; font-size: 12px;
+}
+.td-label { color: var(--text); font-weight: 500; white-space: nowrap; }
+.mono { font-family: 'DM Mono', monospace; font-size: 12px; }
+
+/* ── PREGUNTA ─────────────────────────────────── */
+.pregunta-list { display: flex; flex-direction: column; gap: 10px; margin-top: 16px; }
+.pregunta {
+  display: flex; gap: 12px; align-items: flex-start;
+  background: var(--surface2); border: 1px solid var(--border);
+  border-left: 4px solid var(--accent);
+  border-radius: 0 10px 10px 0;
+  padding: 13px 16px; font-size: 14px;
+}
+.pregunta-n {
+  font-family: 'Syne', sans-serif; font-weight: 700; font-size: 13px;
+  color: var(--accent); flex-shrink: 0; margin-top: 1px;
+}
+.pregunta.naranja { border-left-color: var(--accent2); }
+.pregunta.naranja .pregunta-n { color: var(--accent2); }
+
+/* ── DIVIDER ──────────────────────────────────── */
+.divider { height: 1.5px; background: var(--border); margin: 22px 0; }
+
+/* ── CIERRE PLENARIA ──────────────────────────── */
+.cierre-box {
+  background: var(--accent3);
+  color: #fff; border-radius: 14px; padding: 24px 28px;
+  margin-top: 8px;
+}
+.cierre-box h3 { font-family: 'Syne', sans-serif; font-size: 17px; margin-bottom: 10px; }
+.cierre-box ul { padding-left: 20px; }
+.cierre-box li { font-size: 14px; margin-bottom: 6px; opacity: .92; }
+
+/* ══════════════════════════════════════════════
+   RECURSOS — páginas 2 y 3
+══════════════════════════════════════════════ */
+
+.recurso-hero {
+  background: var(--teal);
+  color: #fff;
+  padding: 40px 48px 36px;
+  position: relative; overflow: hidden;
+}
+.recurso-hero::after {
+  content: attr(data-bg);
+  position: absolute; right: 32px; bottom: -24px;
+  font-family: 'Syne', sans-serif; font-size: 96px; font-weight: 800;
+  color: rgba(255,255,255,0.06); pointer-events: none;
+}
+.recurso-hero.naranja { background: #6e3d10; }
+.recurso-hero h2 {
+  font-family: 'Syne', sans-serif; font-size: clamp(22px, 3.5vw, 34px);
+  font-weight: 800; line-height: 1.15; margin-bottom: 10px;
+}
+.recurso-hero p { color: rgba(255,255,255,0.7); font-size: 14px; max-width: 560px; }
+.recurso-hero .r-kicker {
+  font-family: 'DM Mono', monospace; font-size: 10px;
+  text-transform: uppercase; letter-spacing: .12em;
+  color: rgba(255,255,255,0.45); margin-bottom: 12px;
+}
+
+.recurso-body { max-width: 820px; margin: 0 auto; padding: 40px 28px 80px; }
+
+.recurso-intro {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: 12px; padding: 20px 24px; margin-bottom: 28px;
+  font-size: 14px; color: var(--muted);
+}
+.recurso-intro strong { color: var(--text); }
+
+/* tabla de recursos — th naranja/teal */
+.th-teal th { background: var(--teal); }
+.th-naranja th { background: #6e3d10; }
+
+.badge {
+  display: inline-block; padding: 2px 9px; border-radius: 5px;
+  font-size: 11px; font-family: 'DM Mono', monospace; font-weight: 500;
+}
+.badge-010 { background: #ede8fd; color: #5b3db5; }
+.badge-020 { background: #fff3cd; color: #7a5500; }
+.badge-040 { background: #fde8e8; color: #922; }
+.badge-050 { background: #e8f0fe; color: #1a3a6e; }
+.badge-060 { background: #e8f9f0; color: #1a6e42; }
+.badge-080 { background: #fff0e0; color: #7a3d00; }
+.fase { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-family: 'DM Mono', monospace; }
+.fase-cod { background: #e8f0fe; color: #1a3a6e; }
+.fase-pru { background: #fff3cd; color: #7a5500; }
+.code { font-family: 'DM Mono', monospace; font-size: 11.5px; background: #f0ede8; padding: 2px 6px; border-radius: 3px; }
+
+/* nota al pie recurso */
+.nota-pie {
+  background: #fff8ed; border: 1px solid #e8c87a; border-radius: 10px;
+  padding: 14px 18px; font-size: 13px; color: #5a4a1a; margin-top: 20px;
+}
+.nota-pie strong { color: #3a2e0a; }
+
+/* ── FOOTER ───────────────────────────────────── */
+.foot {
+  text-align: center; color: var(--muted); font-size: 12px;
+  padding: 28px 24px; font-family: 'DM Mono', monospace;
+  border-top: 1px solid var(--border);
+}
+
+/* ── CONCEPTO BOX ─────────────────────────────── */
+.concepto-box {
+  background: #f0f4ff;
+  border: 1.5px solid #b0c4f0;
+  border-left: 4px solid var(--accent);
+  border-radius: 0 12px 12px 0;
+  padding: 18px 20px;
+  margin: 18px 0;
+}
+.concepto-ref {
+  font-family: 'DM Mono', monospace; font-size: 10.5px;
+  color: var(--accent); text-transform: uppercase; letter-spacing: .08em;
+  margin-bottom: 8px; opacity: .85;
+}
+.concepto-titulo {
+  font-family: 'Syne', sans-serif; font-weight: 700; font-size: 14px;
+  color: var(--accent); margin-bottom: 10px !important;
+}
+.concepto-box p { color: #2a3560 !important; font-size: 14px !important; margin-bottom: 8px !important; }
+.concepto-box p:last-child { margin-bottom: 0 !important; }
+.concepto-box strong { color: #1a2a50 !important; }
+.concepto-box em { color: #1a2a50; }
+.concepto-ejemplo {
+  background: rgba(255,255,255,0.7); border: 1px solid #c0d0f0;
+  border-radius: 8px; padding: 10px 14px; margin: 8px 0;
+  font-size: 13.5px; color: #2a3560; line-height: 1.6;
+}
+.concepto-ej-label { font-family:'DM Mono',monospace; font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.06em; margin-right:6px; }
+.concepto-flecha { color: var(--accent2); font-weight: 700; margin: 0 6px; }
+.formula-inline {
+  background: var(--accent); color: #fff;
+  border-radius: 8px; padding: 10px 16px;
+  font-family: 'DM Mono', monospace; font-size: 13.5px;
+  text-align: center; margin: 12px 0; letter-spacing: .02em;
+}
+
+
+@media (max-width: 640px) {
+  .hero, .recurso-hero { padding: 36px 20px 32px; }
+  .container, .recurso-body { padding: 28px 16px 60px; }
+  .paso-body { padding: 18px 16px; }
+  .paso-header { padding: 14px 16px; flex-wrap: wrap; }
+  .paso-time { margin-left: 0; }
+  .nav-tab { padding: 12px 16px; font-size: 12px; }
+  .welcome-box, .reco-box { padding: 20px 18px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ══ NAVEGACIÓN ═══════════════════════════════ -->
+<nav class="nav-tabs">
+  <button class="nav-tab active" onclick="showPage('taller')">
+    <span class="nav-label">Instrucciones</span>
+    Taller
+  </button>
+  <button class="nav-tab" onclick="showPage('recurso1')">
+    <span class="nav-label">Recurso 1</span>
+    Inventario de Elementos
+  </button>
+  <button class="nav-tab" onclick="showPage('recurso2')">
+    <span class="nav-label">Recurso 2</span>
+    Log de Defectos
+  </button>
+</nav>
+
+
+<!-- ══════════════════════════════════════════════
+     PÁGINA 1 — TALLER (INSTRUCCIONES)
+══════════════════════════════════════════════ -->
+<div id="page-taller" class="page active">
+
+  <div class="hero">
+    <div class="hero-kicker">PSP · Unidad 2 · Escenario 3 · Trabajo grupal</div>
+    <h1>Taller: <em>Estimación y Calidad</em><br>de Software</h1>
+    <p class="hero-sub">Aplicarán los conceptos de la Lectura Fundamental 3 sobre un proyecto real: calcularán el tamaño de un módulo de software y analizarán los defectos encontrados durante su construcción.</p>
+    <div class="hero-chips">
+      <div class="chip">⏱ <strong>45 minutos</strong></div>
+      <div class="chip">👥 <strong>Trabajo en equipo de sala</strong></div>
+      <div class="chip">📋 <strong>4 pasos + reflexión</strong></div>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <!-- BIENVENIDA -->
+    <div class="welcome-box">
+      <h2>¡Bienvenidos al taller de Estimación y Calidad de Software!</h2>
+      <p>Este taller les permitirá <strong>aterrizar los conceptos de la Lectura Fundamental 3</strong> en un caso práctico: van a estimar el tamaño de un proyecto de software usando líneas de código (LOC) y van a analizar un log de defectos real para sacar conclusiones sobre la calidad del proceso.</p>
+      <p>En <strong>45 minutos</strong> trabajarán en equipo para recorrer el ciclo completo: entender el proyecto, estimar, revisar defectos y reflexionar. <strong>¡Esto va a requerir de ustedes máximo enfoque y trabajo en equipo!</strong></p>
+    </div>
+
+    <!-- RECOMENDACIONES -->
+    <div class="reco-box">
+      <h3>📌 Mis recomendaciones antes de empezar</h3>
+      <ul class="reco-list">
+        <li><strong>Tengan abierta la Lectura Fundamental 3.</strong> Es su guía conceptual para todo el taller. Sin ella, las actividades no tienen contexto.</li>
+        <li><strong>Usen los Recursos disponibles en este mismo documento.</strong> El Recurso 1 (Inventario de Elementos) y el Recurso 2 (Log de Defectos) son los insumos con los que van a trabajar. Búsquenlos en las pestañas de arriba.</li>
+        <li><strong>Discutan antes de escribir.</strong> Cada paso tiene una pregunta o tarea: no la resuelvan solos. El equipo completo debe estar de acuerdo antes de diligenciar la tabla.</li>
+        <li><strong>No busquen las respuestas en internet.</strong> Todo lo que necesitan está en la lectura y los recursos de este taller.</li>
+        <li><strong>Revisen al final y reflexionen sobre su trabajo.</strong> El último paso es tan importante como el primero.</li>
+      </ul>
+    </div>
+
+    <!-- ═══ PASO 1 ═══════════════════════════════ -->
+    <div class="paso">
+      <div class="paso-header">
+        <div class="paso-num">1</div>
+        <div class="paso-title">Conozcan el proyecto y el requerimiento</div>
+        <div class="paso-time">⏱ 5 min</div>
+      </div>
+      <div class="paso-body">
+        <p>Antes de estimar cualquier cosa, necesitan entender <strong>qué van a construir</strong>. Lean con atención la descripción del proyecto y la historia de usuario sobre la que van a trabajar en este taller.</p>
+
+        <div class="table-wrap">
+          <table>
+            <tbody>
+              <tr>
+                <td class="td-label" style="width:28%">Nombre del proyecto</td>
+                <td><strong>ReservaFácil</strong> — Aplicación web para reserva de mesas en restaurantes</td>
+              </tr>
+              <tr>
+                <td class="td-label">Descripción</td>
+                <td style="font-size:13.5px; color:var(--muted);">En el entorno actual, donde la tecnología se integra de forma creciente en la experiencia gastronómica, surge la necesidad de una plataforma que facilite la reserva de mesas en restaurantes de manera rápida, segura y personalizada. La solución permite a los usuarios explorar opciones gastronómicas mediante filtros, reservar mesas, gestionar su historial de reservas y dejar comentarios. Los restaurantes, por su parte, pueden actualizar su disponibilidad y analizar su desempeño.</td>
+              </tr>
+              <tr>
+                <td class="td-label">Usuarios principales</td>
+                <td style="color:var(--muted);">Clientes que desean reservar mesas · Administradores de restaurantes</td>
+              </tr>
+              <tr>
+                <td class="td-label">Funciones clave</td>
+                <td style="color:var(--muted);">Búsqueda y reserva de mesas · Gestión de disponibilidad · Historial de reservas · Valoraciones y comentarios</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p style="margin-top:18px;">El módulo sobre el que van a trabajar en este taller es la <strong>Historia de Usuario #1: Registro de Usuario</strong>. Léanla con cuidado porque sobre ella harán la estimación en el Paso 2.</p>
+
+        <div class="table-wrap">
+          <table>
+            <tbody>
+              <tr>
+                <td class="td-label" style="width:28%">ID</td>
+                <td><strong>HU-01</strong></td>
+              </tr>
+              <tr>
+                <td class="td-label">Título</td>
+                <td><strong>Registro de usuario</strong></td>
+              </tr>
+              <tr>
+                <td class="td-label">Historia</td>
+                <td style="font-size:13.5px; color:var(--muted);"><em>"Como usuario, quiero crear una cuenta ingresando mis datos personales (nombre completo, correo electrónico, número de teléfono y contraseña) para acceder a la plataforma y gestionar mis reservas de manera personalizada."</em></td>
+              </tr>
+              <tr>
+                <td class="td-label">Criterios de aceptación</td>
+                <td style="font-size:13px; color:var(--muted);">
+                  · El formulario debe tener campos para: nombre completo, correo electrónico, número de teléfono y contraseña.<br>
+                  · Todos los campos son obligatorios.<br>
+                  · El correo debe tener formato válido.<br>
+                  · La contraseña debe tener mínimo 8 caracteres.<br>
+                  · Al enviar, el sistema valida los datos antes de registrar al usuario.<br>
+                  · Debe existir un enlace a la pantalla de inicio de sesión para usuarios ya registrados.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="accion">
+          <div class="accion-icon">💬</div>
+          <div class="accion-text">Como equipo, discutan: <strong>¿qué elementos de interfaz HTML necesitaría esta pantalla?</strong> Hagan una lista mental antes de pasar al Paso 2. No escriban nada todavía.</div>
+        </div>
+        <div class="accion" style="background: var(--accent3); margin-top:10px;">
+          <div class="accion-icon">📝</div>
+          <div class="accion-text"><strong style="color:#FFD580;">Descarguen la hoja de trabajo</strong> desde este enlace: <a href="https://github.com/dacocursos-eng/PSP/raw/main/Taller_E3_PSP_Hoja_de_Trabajo.docx" style="color:#FFD580; font-weight:700; text-decoration:underline;">Taller_E3_PSP_Hoja_de_Trabajo.docx ↓</a> — ábrala en Word y téngala lista al lado. En ella van a registrar todas sus respuestas durante el taller.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ PASO 2 ═══════════════════════════════ -->
+    <div class="paso">
+      <div class="paso-header">
+        <div class="paso-num naranja">2</div>
+        <div class="paso-title">Estimen el tamaño del módulo (LOC)</div>
+        <div class="paso-time">⏱ 15 min</div>
+      </div>
+      <div class="paso-body">
+        <p>Con base en la <strong>HU-01: Registro de Usuario</strong> que leyeron en el Paso 1, su tarea es identificar todos los elementos de interfaz HTML que necesita esa pantalla y estimar cuántas <strong>líneas de código (LOC)</strong> tomará construirla.</p>
+
+        <div class="accion">
+          <div class="accion-icon">📋</div>
+          <div class="accion-text">Abran el <strong>Recurso 1 — Inventario de Elementos HTML</strong> (pestaña de arriba). Allí encontrarán cuántas LOC corresponden a cada tipo de elemento. Úsenlo como referencia para completar la tabla de estimación.</div>
+        </div>
+        <div class="accion" style="background: var(--accent3); margin-top:10px;">
+          <div class="accion-icon">📝</div>
+          <div class="accion-text">Registren sus respuestas en el <strong style="color:#FFD580;">Paso 2</strong> de la hoja de trabajo: la tabla de estimación y la tabla de tiempo.</div>
+        </div>
+
+        <div class="concepto-box">
+          <div class="concepto-ref">📖 Lectura Fundamental 3 — Sección 2.1: Estimación del tamaño</div>
+          <p class="concepto-titulo">¿Cómo se identifican los elementos de una pantalla?</p>
+          <p>La Lectura Fundamental 3 explica que para estimar el tamaño de un módulo, el punto de partida son los <strong>requerimientos</strong>: cada criterio de aceptación de la historia de usuario describe algo que el usuario debe poder hacer. Esa acción, traducida a pantalla, se convierte en uno o varios elementos HTML.</p>
+          <p>La regla práctica es leer cada criterio y preguntarse: <em>¿qué necesita el usuario ver o usar en la pantalla para cumplir esto?</em> Por ejemplo:</p>
+          <div class="concepto-ejemplo">
+            <span class="concepto-ej-label">Criterio →</span> "El formulario debe tener campo de nombre completo"
+            <span class="concepto-flecha">→</span> <strong>1 etiqueta</strong> (label) + <strong>1 campo de texto</strong> (input) = 2 LOC
+          </div>
+          <div class="concepto-ejemplo">
+            <span class="concepto-ej-label">Criterio →</span> "Debe existir un enlace a inicio de sesión"
+            <span class="concepto-flecha">→</span> <strong>1 enlace</strong> (a href) = 1 LOC
+          </div>
+          <p>Recuerden también contar los <strong>elementos estructurales</strong> que toda pantalla necesita aunque el requerimiento no los mencione explícitamente: la estructura base del archivo HTML, el contenedor principal y el formulario que envuelve los campos.</p>
+        </div>
+
+        <p style="margin-top:18px;"><strong>Paso a paso:</strong></p>
+        <ol>
+          <li>Lean cada criterio de aceptación de la HU-01 (Paso 1) y tradúzcanlo en elementos HTML concretos usando la lógica de arriba.</li>
+          <li>Sumen también los elementos estructurales: estructura base, contenedor y formulario.</li>
+          <li>Para cada elemento, consulten el <strong>Recurso 1</strong> y anoten las LOC que le corresponden.</li>
+          <li>Sumen el total y obtengan el tamaño estimado del módulo.</li>
+        </ol>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th style="width:30%">Elemento identificado en la HU#1</th>
+                <th>Descripción / Detalle</th>
+                <th>Cantidad</th>
+                <th>LOC por unidad</th>
+                <th>Total LOC</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td class="td-vacio"> </td><td class="td-vacio"> </td><td class="td-vacio"> </td><td class="td-vacio"> </td><td class="td-vacio"> </td></tr>
+              <tr><td class="td-vacio"> </td><td class="td-vacio"> </td><td class="td-vacio"> </td><td class="td-vacio"> </td><td class="td-vacio"> </td></tr>
+              <tr><td class="td-vacio"> </td><td class="td-vacio"> </td><td class="td-vacio"> </td><td class="td-vacio"> </td><td class="td-vacio"> </td></tr>
+              <tr><td class="td-vacio"> </td><td class="td-vacio"> </td><td class="td-vacio"> </td><td class="td-vacio"> </td><td class="td-vacio"> </td></tr>
+              <tr><td class="td-vacio"> </td><td class="td-vacio"> </td><td class="td-vacio"> </td><td class="td-vacio"> </td><td class="td-vacio"> </td></tr>
+              <tr><td class="td-vacio"> </td><td class="td-vacio"> </td><td class="td-vacio"> </td><td class="td-vacio"> </td><td class="td-vacio"> </td></tr>
+              <tr>
+                <td colspan="4" style="text-align:right; font-family:'Syne',sans-serif; font-weight:700; padding-top:13px;">TOTAL LOC ESTIMADO:</td>
+                <td class="td-vacio" style="font-family:'Syne',sans-serif; font-weight:700;"> </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="concepto-box">
+          <div class="concepto-ref">📖 Lectura Fundamental 3 — Sección 2.1 · Lectura Fundamental 1 — Sección 2: Métricas e Indicadores</div>
+          <p class="concepto-titulo">¿Qué es el rendimiento y cómo se usa para estimar el tiempo?</p>
+          <p>La Lectura Fundamental 1 define el <strong>rendimiento</strong> como la cantidad de líneas de código sin defectos que un programador produce en una hora, basado en un estándar de codificación. La fórmula es:</p>
+          <div class="formula-inline">Rendimiento = LOC producidas ÷ Tiempo real de codificación (horas)</div>
+          <p>Idealmente, cada programador calcula su propio rendimiento midiendo sus proyectos anteriores. Como ustedes están en las primeras semanas del curso y aún no tienen esa historia personal, la Lectura Fundamental 3 propone partir de un <strong>inventario de referencia</strong> para construir esa base de datos propia.</p>
+          <p><strong>Para este taller</strong>, usen como punto de partida un rendimiento de <strong>10 LOC/hora</strong>, que representa a un estudiante que ya conoce la sintaxis básica de HTML pero aún está en proceso de práctica. Si el equipo considera que trabaja más lento (por ejemplo, porque es la primera vez que codifican en HTML), pueden usar <strong>5 LOC/hora</strong>. Lo importante es que justifiquen por qué eligieron ese valor.</p>
+          <p>Con ese dato, la fórmula para estimar el tiempo es:</p>
+          <div class="formula-inline">Tiempo estimado = LOC totales ÷ Rendimiento (LOC/hora)</div>
+        </div>
+
+        <p style="margin-top:16px;">Apliquen la fórmula con el total de LOC que calcularon arriba:</p>
+
+        <div class="table-wrap">
+          <table>
+            <tbody>
+              <tr>
+                <td class="td-label" style="width:55%">Total LOC calculado en la tabla anterior</td>
+                <td class="td-vacio">Copien el valor aquí</td>
+              </tr>
+              <tr>
+                <td class="td-label">Rendimiento que asumieron (LOC/hora) y por qué eligieron ese valor</td>
+                <td class="td-vacio"> </td>
+              </tr>
+              <tr>
+                <td class="td-label">Tiempo estimado de construcción (apliquen la fórmula)</td>
+                <td class="td-vacio"> </td>
+              </tr>
+              <tr>
+                <td class="td-label">¿Esto es una estimación o una predicción? (usen las definiciones de la Lectura 3)</td>
+                <td class="td-vacio"> </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ PASO 3 ═══════════════════════════════ -->
+    <div class="paso">
+      <div class="paso-header">
+        <div class="paso-num rojo">3</div>
+        <div class="paso-title">Analicen el log de defectos</div>
+        <div class="paso-time">⏱ 15 min</div>
+      </div>
+      <div class="paso-body">
+        <p>Un equipo ya construyó el módulo de Registro de Usuario y llevó registro de todos los defectos que encontró durante la construcción y las pruebas. Ese registro es el <strong>Log de Defectos</strong>.</p>
+
+        <div class="accion">
+          <div class="accion-icon">📋</div>
+          <div class="accion-text">Abran el <strong>Recurso 2 — Log de Defectos</strong> (pestaña de arriba). Léanlo completo antes de responder. Allí también encontrarán la tabla de clasificación de tipos de defectos del PSP que necesitan para el análisis.</div>
+        </div>
+        <div class="accion" style="background: var(--accent3); margin-top:10px;">
+          <div class="accion-icon">📝</div>
+          <div class="accion-text">Registren todas sus respuestas en el <strong style="color:#FFD580;">Paso 3</strong> de la hoja de trabajo: las 7 preguntas y la tabla resumen de hallazgos.</div>
+        </div>
+
+        <p>Con base en el log, respondan las siguientes preguntas <strong>como equipo</strong>. Discutan cada una antes de escribir:</p>
+
+        <div class="pregunta-list">
+          <div class="pregunta">
+            <div class="pregunta-n">P1</div>
+            <div>¿Cuántos defectos se registraron en total? ¿Cuántos tipos de defecto distintos aparecen? Háganlo como un conteo directo sobre el log.</div>
+          </div>
+          <div class="pregunta">
+            <div class="pregunta-n">P2</div>
+            <div>¿Cuál es el <strong>tipo de defecto que más se repite</strong>? Nombren el tipo y su código de referencia. ¿Qué podría indicar esto sobre las prácticas del equipo?</div>
+          </div>
+          <div class="pregunta">
+            <div class="pregunta-n">P3</div>
+            <div>¿En cuál <strong>fase del proceso</strong> aparece la mayor cantidad de defectos? ¿Y en cuál fase se eliminan más? ¿Es lo mismo o hay diferencia?</div>
+          </div>
+          <div class="pregunta">
+            <div class="pregunta-n">P4</div>
+            <div>Calculen el <strong>tiempo total de corrección</strong> sumando los minutos del log. ¿Cuál fue el defecto que más tiempo tomó corregir y a qué tipo pertenece?</div>
+          </div>
+          <div class="pregunta">
+            <div class="pregunta-n">P5</div>
+            <div>Hay al menos un defecto que <strong>no fue corregido</strong>. ¿Qué tipo es? ¿Qué riesgo representa dejar ese defecto abierto antes de entregar el módulo al cliente?</div>
+          </div>
+          <div class="pregunta naranja">
+            <div class="pregunta-n">P6</div>
+            <div>
+              <strong>Análisis de calidad del módulo.</strong> La Lectura Fundamental 3 define la calidad de software desde <strong>3 dimensiones</strong>: (1) calidad del <em>proceso</em> — ¿se siguieron los procedimientos correctos y estándares?; (2) calidad del <em>producto</em> — ¿el software cumple los requerimientos del cliente?; (3) <em>valor para el negocio</em> — ¿es útil para quien lo usará?
+              <br><br>
+              Evalúen el módulo de Registro de Usuario <strong>frente a cada una de esas 3 dimensiones</strong> usando la información del log. ¿En cuál dimensión falla más? ¿Diría el equipo que el módulo tiene calidad alta, media o baja? Justifiquen.
+            </div>
+          </div>
+          <div class="pregunta naranja">
+            <div class="pregunta-n">P7</div>
+            <div>Si el equipo hubiera aplicado una <strong>revisión de código</strong> antes de pasar a pruebas, ¿cuáles defectos del log creen que se habrían detectado antes? ¿Por qué?</div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+        <p>Diligencien la siguiente tabla resumen con sus hallazgos:</p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Hallazgo</th>
+                <th>Respuesta del equipo</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td class="td-label">Total de defectos registrados</td><td class="td-vacio"> </td></tr>
+              <tr><td class="td-label">Tipos de defecto distintos</td><td class="td-vacio"> </td></tr>
+              <tr><td class="td-label">Tipo de defecto más frecuente</td><td class="td-vacio"> </td></tr>
+              <tr><td class="td-label">Fase con más aparición de defectos</td><td class="td-vacio"> </td></tr>
+              <tr><td class="td-label">Tiempo total de corrección (minutos)</td><td class="td-vacio"> </td></tr>
+              <tr><td class="td-label">Defecto más costoso en tiempo (ID + tipo)</td><td class="td-vacio"> </td></tr>
+              <tr><td class="td-label">Defecto(s) pendientes de corrección</td><td class="td-vacio"> </td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ PASO 4 — REFLEXIÓN ═══════════════════ -->
+    <div class="paso">
+      <div class="paso-header">
+        <div class="paso-num gris">4</div>
+        <div class="paso-title">Posmortem del equipo · Reflexión final</div>
+        <div class="paso-time">⏱ 5 min</div>
+      </div>
+      <div class="paso-body">
+        <p>El <strong>posmortem</strong> es la última fase de cualquier proceso de desarrollo en PSP. Es el momento en que el equipo mira hacia atrás y extrae aprendizajes. Respondan estas preguntas pensando en lo que vivieron durante el taller:</p>
+
+        <div class="pregunta-list">
+          <div class="pregunta">
+            <div class="pregunta-n">R1</div>
+            <div>¿Qué fue lo más difícil de la estimación de LOC? ¿Tuvieron dudas en algún elemento? ¿Cómo las resolvieron?</div>
+          </div>
+          <div class="pregunta">
+            <div class="pregunta-n">R2</div>
+            <div>¿Qué valor tiene llevar un log de defectos aunque los defectos ya hayan sido corregidos? Conecten con el concepto de <strong>mejora continua</strong> de la lectura.</div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="cierre-box">
+          <h3>🎙 Plenaria — Compartimos con todos</h3>
+          <p style="opacity:.88; font-size:14px; margin-bottom:12px;">Cada equipo comparte <strong>1 hallazgo clave</strong> del análisis de defectos y <strong>1 aprendizaje</strong> sobre la estimación. El docente consolida los resultados en la pizarra comparando los totales de LOC y los tipos de defecto más frecuentes entre equipos.</p>
+          <ul>
+            <li>¿Coincidieron todos los equipos en el mismo tipo de defecto más frecuente?</li>
+            <li>¿Sus estimaciones de tiempo fueron similares o muy distintas? ¿A qué se debe la diferencia?</li>
+            <li>¿Qué implicaría llevar este proceso a un proyecto real de varios meses?</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /.container -->
+  <div class="foot">PSP · Unidad 2 · Escenario 3 · Estimación y Calidad de Software · Politécnico Grancolombiano</div>
+</div><!-- /#page-taller -->
+
+
+<!-- ══════════════════════════════════════════════
+     PÁGINA 2 — RECURSO 1: INVENTARIO DE ELEMENTOS
+══════════════════════════════════════════════ -->
+<div id="page-recurso1" class="page">
+
+  <div class="recurso-hero" data-bg="R1">
+    <div class="r-kicker">Recurso 1 · Taller Escenario 3</div>
+    <h2>Inventario de Elementos HTML<br>y su estimación en LOC</h2>
+    <p>Use esta tabla como referencia para completar la estimación de tamaño del Paso 2 del taller. No modifiquen este recurso; solo consúltenlo.</p>
+  </div>
+
+  <div class="recurso-body">
+
+    <div class="recurso-intro">
+      <strong>¿Para qué sirve este inventario?</strong> Según la Lectura Fundamental 3, para estimar el tamaño de un proyecto de software necesitamos una referencia de cuántas líneas de código (LOC) requiere cada tipo de elemento. Este inventario es esa referencia. Recuerden: los <strong>comentarios</strong>, las <strong>llaves { }</strong> y las líneas en blanco <strong>no cuentan como LOC</strong>.
+    </div>
+
+    <div class="table-wrap th-teal">
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Elemento HTML</th>
+            <th>LOC por unidad</th>
+            <th>Regla de cálculo</th>
+            <th>Ejemplo de código</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="mono" style="color:var(--teal)">01</td>
+            <td><strong>Estructura base</strong> (plantilla HTML)</td>
+            <td style="font-weight:700; color:var(--teal)">5 LOC</td>
+            <td>DOCTYPE + apertura/cierre de &lt;html&gt;, &lt;head&gt;, &lt;body&gt;</td>
+            <td><span class="code">&lt;!DOCTYPE html&gt;&lt;html&gt;...&lt;/html&gt;</span></td>
+          </tr>
+          <tr>
+            <td class="mono" style="color:var(--teal)">02</td>
+            <td><strong>Contenedor</strong> (div / section / article)</td>
+            <td style="font-weight:700; color:var(--teal)">2 LOC</td>
+            <td>1 línea de apertura + 1 de cierre</td>
+            <td><span class="code">&lt;div&gt; … &lt;/div&gt;</span></td>
+          </tr>
+          <tr>
+            <td class="mono" style="color:var(--teal)">03</td>
+            <td><strong>Formulario</strong></td>
+            <td style="font-weight:700; color:var(--teal)">2 LOC</td>
+            <td>1 línea de apertura + 1 de cierre</td>
+            <td><span class="code">&lt;form&gt; … &lt;/form&gt;</span></td>
+          </tr>
+          <tr>
+            <td class="mono" style="color:var(--teal)">04</td>
+            <td><strong>Etiqueta</strong> (label)</td>
+            <td style="font-weight:700; color:var(--teal)">1 LOC</td>
+            <td>1 por etiqueta, en una sola línea</td>
+            <td><span class="code">&lt;label&gt;Nombre:&lt;/label&gt;</span></td>
+          </tr>
+          <tr>
+            <td class="mono" style="color:var(--teal)">05</td>
+            <td><strong>Campo de texto</strong> (input)</td>
+            <td style="font-weight:700; color:var(--teal)">1 LOC</td>
+            <td>1 por campo, sin estilos</td>
+            <td><span class="code">&lt;input type="text"&gt;</span></td>
+          </tr>
+          <tr>
+            <td class="mono" style="color:var(--teal)">06</td>
+            <td><strong>Botón</strong> (button / input submit)</td>
+            <td style="font-weight:700; color:var(--teal)">1 LOC</td>
+            <td>1 por botón, sin estilos</td>
+            <td><span class="code">&lt;button&gt;Enviar&lt;/button&gt;</span></td>
+          </tr>
+          <tr>
+            <td class="mono" style="color:var(--teal)">07</td>
+            <td><strong>Enlace</strong> (hipervínculo)</td>
+            <td style="font-weight:700; color:var(--teal)">1 LOC</td>
+            <td>1 por enlace</td>
+            <td><span class="code">&lt;a href="#"&gt;Ir&lt;/a&gt;</span></td>
+          </tr>
+          <tr>
+            <td class="mono" style="color:var(--teal)">08</td>
+            <td><strong>Imagen</strong></td>
+            <td style="font-weight:700; color:var(--teal)">1 LOC</td>
+            <td>1 por imagen (etiqueta auto-cerrada)</td>
+            <td><span class="code">&lt;img src="…" alt="…"&gt;</span></td>
+          </tr>
+          <tr>
+            <td class="mono" style="color:var(--teal)">09</td>
+            <td><strong>Párrafo / Encabezado</strong></td>
+            <td style="font-weight:700; color:var(--teal)">1 LOC</td>
+            <td>1 por elemento &lt;p&gt; o &lt;h1&gt;–&lt;h6&gt;</td>
+            <td><span class="code">&lt;h2&gt;Registro&lt;/h2&gt;</span></td>
+          </tr>
+          <tr>
+            <td class="mono" style="color:var(--teal)">10</td>
+            <td><strong>Lista</strong> (ul / ol)</td>
+            <td style="font-weight:700; color:var(--teal)">N + 2 LOC</td>
+            <td>Apertura + cierre de la lista (2 LOC) + 1 LOC por cada ítem &lt;li&gt;</td>
+            <td><span class="code">&lt;ul&gt;&lt;li&gt;…&lt;/li&gt;&lt;/ul&gt;</span></td>
+          </tr>
+          <tr>
+            <td class="mono" style="color:var(--teal)">11</td>
+            <td><strong>Tabla</strong></td>
+            <td style="font-weight:700; color:var(--teal)">filas × cols × 2</td>
+            <td>Cada celda &lt;td&gt; o &lt;th&gt; ocupa apertura + cierre. Cuenten encabezados como una fila más.</td>
+            <td><span class="code">&lt;table&gt;&lt;tr&gt;&lt;td&gt;…&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;</span></td>
+          </tr>
+          <tr>
+            <td class="mono" style="color:var(--teal)">12</td>
+            <td><strong>Lista desplegable</strong> (select)</td>
+            <td style="font-weight:700; color:var(--teal)">N + 2 LOC</td>
+            <td>Apertura + cierre del &lt;select&gt; + 1 LOC por cada &lt;option&gt;</td>
+            <td><span class="code">&lt;select&gt;&lt;option&gt;…&lt;/option&gt;&lt;/select&gt;</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="nota-pie">
+      <strong>Recuerden de la Lectura Fundamental 3:</strong> el inventario es una <em>referencia</em>, no una verdad absoluta. El número exacto de líneas puede variar según el estándar de codificación del equipo. Lo importante es ser consistentes con la misma referencia durante toda la estimación. También recuerden revisar la diferencia entre <strong>estimación</strong> y <strong>predicción</strong> antes de presentar su resultado.
+    </div>
+
+  </div>
+  <div class="foot">Recurso 1 · Inventario de Elementos HTML · PSP Escenario 3</div>
+</div><!-- /#page-recurso1 -->
+
+
+<!-- ══════════════════════════════════════════════
+     PÁGINA 3 — RECURSO 2: LOG DE DEFECTOS
+══════════════════════════════════════════════ -->
+<div id="page-recurso2" class="page">
+
+  <div class="recurso-hero naranja" data-bg="R2">
+    <div class="r-kicker">Recurso 2 · Taller Escenario 3</div>
+    <h2>Clasificación de Defectos<br>y Log de Defectos — Módulo Registro</h2>
+    <p>Lean primero la tabla de clasificación (parte A) y luego analicen el log (parte B). Este recurso es el insumo para el Paso 3 del taller.</p>
+  </div>
+
+  <div class="recurso-body">
+
+    <!-- PARTE A -->
+    <p style="font-family:'Syne',sans-serif; font-weight:700; font-size:17px; margin-bottom:6px; color:#6e3d10;">A. Tabla de clasificación de tipos de defectos (PSP)</p>
+    <div class="recurso-intro">
+      Según la Lectura Fundamental 3, los defectos se clasifican en tipos para facilitar su registro y análisis. Usen esta tabla para identificar a qué tipo pertenece cada defecto del log. La columna <strong>"Fase habitual"</strong> indica en qué etapa del proceso suele aparecer ese tipo de defecto.
+    </div>
+
+    <div class="table-wrap th-naranja">
+      <table>
+        <thead>
+          <tr>
+            <th>Ref.</th>
+            <th>Nombre del tipo</th>
+            <th>¿Qué incluye?</th>
+            <th>Fase habitual</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="badge badge-010">010</span></td>
+            <td><strong>Documentación</strong></td>
+            <td>Comentarios incorrectos, mensajes del sistema mal redactados o ausentes</td>
+            <td><span class="fase fase-cod">Todas</span></td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-020">020</span></td>
+            <td><strong>Sintaxis</strong></td>
+            <td>Erratas en etiquetas HTML, atributos mal escritos, formato incorrecto de instrucciones</td>
+            <td><span class="fase fase-cod">Construcción</span></td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-040">040</span></td>
+            <td><strong>Asignación</strong></td>
+            <td>Declaración incorrecta de atributos, IDs o nombres duplicados, ámbito equivocado de variables</td>
+            <td><span class="fase fase-cod">Construcción</span></td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-050">050</span></td>
+            <td><strong>Interfaz</strong></td>
+            <td>Problemas entre componentes, llamadas incorrectas a funciones, formatos de entrada/salida inadecuados</td>
+            <td><span class="fase fase-cod">Construcción</span> <span class="fase fase-pru">Pruebas</span></td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-060">060</span></td>
+            <td><strong>Chequeo</strong></td>
+            <td>Validaciones faltantes o incorrectas, mensajes de error ausentes, campos obligatorios sin restricción</td>
+            <td><span class="fase fase-cod">Construcción</span> <span class="fase fase-pru">Pruebas</span></td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-080">080</span></td>
+            <td><strong>Función</strong></td>
+            <td>Lógica incorrecta, bucles mal definidos, errores de cómputo o algoritmo en scripts</td>
+            <td><span class="fase fase-cod">Construcción</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="height:32px"></div>
+
+    <!-- PARTE B -->
+    <p style="font-family:'Syne',sans-serif; font-weight:700; font-size:17px; margin-bottom:6px; color:#6e3d10;">B. Log de defectos — Módulo: Registro de Usuario</p>
+    <div class="recurso-intro">
+      El equipo que construyó este módulo llevó un registro de cada defecto encontrado durante la construcción y las pruebas, siguiendo el formato PSP de la Lectura Fundamental 3. Lean cada fila con cuidado: la <strong>descripción</strong> es la información más importante para el análisis del Paso 3.
+    </div>
+
+    <div class="table-wrap th-naranja">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Fecha</th>
+            <th>Tipo</th>
+            <th>Fase en que aparece</th>
+            <th>Fase en que se elimina</th>
+            <th>Tiempo corrección</th>
+            <th>¿Corregido?</th>
+            <th>Descripción del defecto</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="mono" style="color:#6e3d10; font-weight:600;">001</td>
+            <td class="mono">12/05/25</td>
+            <td><span class="badge badge-020">020 Sintaxis</span></td>
+            <td><span class="fase fase-cod">Construcción</span></td>
+            <td><span class="fase fase-cod">Construcción</span></td>
+            <td class="mono">5 min</td>
+            <td style="color:var(--accent3); font-weight:600;">✔ Sí</td>
+            <td style="font-size:13px;">Etiqueta de cierre <span class="code">&lt;/form&gt;</span> escrita con un espacio extra al final. El navegador no reconoció el cierre y el formulario quedó incompleto visualmente.</td>
+          </tr>
+          <tr>
+            <td class="mono" style="color:#6e3d10; font-weight:600;">002</td>
+            <td class="mono">12/05/25</td>
+            <td><span class="badge badge-040">040 Asignación</span></td>
+            <td><span class="fase fase-cod">Construcción</span></td>
+            <td><span class="fase fase-cod">Construcción</span></td>
+            <td class="mono">10 min</td>
+            <td style="color:var(--accent3); font-weight:600;">✔ Sí</td>
+            <td style="font-size:13px;">Dos campos de texto (correo y teléfono) tenían el mismo atributo <span class="code">id="campo1"</span>. La etiqueta &lt;label&gt; solo vinculaba al primero. Se renombraron los IDs siguiendo el estándar de nominación.</td>
+          </tr>
+          <tr>
+            <td class="mono" style="color:#6e3d10; font-weight:600;">003</td>
+            <td class="mono">13/05/25</td>
+            <td><span class="badge badge-020">020 Sintaxis</span></td>
+            <td><span class="fase fase-cod">Construcción</span></td>
+            <td><span class="fase fase-cod">Construcción</span></td>
+            <td class="mono">3 min</td>
+            <td style="color:var(--accent3); font-weight:600;">✔ Sí</td>
+            <td style="font-size:13px;">El atributo type del input de correo estaba escrito como <span class="code">type="emial"</span> (typo). El campo se comportaba como texto plano sin validar el formato de correo electrónico.</td>
+          </tr>
+          <tr>
+            <td class="mono" style="color:#6e3d10; font-weight:600;">004</td>
+            <td class="mono">13/05/25</td>
+            <td><span class="badge badge-060">060 Chequeo</span></td>
+            <td><span class="fase fase-pru">Pruebas</span></td>
+            <td><span class="fase fase-pru">Pruebas</span></td>
+            <td class="mono">20 min</td>
+            <td style="color:var(--accent3); font-weight:600;">✔ Sí</td>
+            <td style="font-size:13px;">El campo de contraseña no tenía restricción de longitud mínima. Era posible registrarse con una contraseña de 1 solo carácter. Se añadió <span class="code">minlength="8"</span> y un mensaje de error informativo.</td>
+          </tr>
+          <tr>
+            <td class="mono" style="color:#6e3d10; font-weight:600;">005</td>
+            <td class="mono">14/05/25</td>
+            <td><span class="badge badge-060">060 Chequeo</span></td>
+            <td><span class="fase fase-pru">Pruebas</span></td>
+            <td><span class="fase fase-pru">Pruebas</span></td>
+            <td class="mono">25 min</td>
+            <td style="color:var(--accent3); font-weight:600;">✔ Sí</td>
+            <td style="font-size:13px;">El formulario permitía enviarse con todos los campos en blanco. Ningún input tenía el atributo <span class="code">required</span>. Se añadió a todos los campos obligatorios.</td>
+          </tr>
+          <tr>
+            <td class="mono" style="color:#6e3d10; font-weight:600;">006</td>
+            <td class="mono">14/05/25</td>
+            <td><span class="badge badge-050">050 Interfaz</span></td>
+            <td><span class="fase fase-pru">Pruebas</span></td>
+            <td><span class="fase fase-pru">Pruebas</span></td>
+            <td class="mono">35 min</td>
+            <td style="color:var(--accent3); font-weight:600;">✔ Sí</td>
+            <td style="font-size:13px;">El botón "Registrarse" no disparaba la función de validación. El atributo <span class="code">onclick</span> llamaba a <span class="code">Validar()</span> con mayúscula, pero la función en JavaScript estaba definida como <span class="code">validar()</span>. JavaScript es sensible a mayúsculas.</td>
+          </tr>
+          <tr>
+            <td class="mono" style="color:#6e3d10; font-weight:600;">007</td>
+            <td class="mono">15/05/25</td>
+            <td><span class="badge badge-040">040 Asignación</span></td>
+            <td><span class="fase fase-cod">Construcción</span></td>
+            <td><span class="fase fase-pru">Pruebas</span></td>
+            <td class="mono">15 min</td>
+            <td style="color:var(--accent3); font-weight:600;">✔ Sí</td>
+            <td style="font-size:13px;">El campo de nombre tenía <span class="code">name="nombre_usuario"</span> en el HTML, pero el script JS lo buscaba como <span class="code">getElementById("txtNombre")</span>. Los nombres no coincidían. Se unificó la nominación.</td>
+          </tr>
+          <tr>
+            <td class="mono" style="color:#6e3d10; font-weight:600;">008</td>
+            <td class="mono">15/05/25</td>
+            <td><span class="badge badge-080">080 Función</span></td>
+            <td><span class="fase fase-pru">Pruebas</span></td>
+            <td><span class="fase fase-pru">Pruebas</span></td>
+            <td class="mono">40 min</td>
+            <td style="color:var(--accent4); font-weight:600;">✘ Pendiente</td>
+            <td style="font-size:13px;">La función de encriptación de contraseña retorna siempre el mismo hash cuando la contraseña contiene caracteres especiales (ej: @, #, !). El error está en la lógica del bucle de iteración. No se corrigió en este sprint.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="nota-pie">
+      <strong>Para el análisis del Paso 3:</strong> usen la Tabla A (clasificación) para interpretar los códigos del log. Recuerden que un defecto puede aparecer en una fase y eliminarse en otra — eso también es información valiosa. El objetivo no es juzgar al equipo que cometió los errores, sino <strong>aprender de los patrones</strong> para mejorar el proceso.
+    </div>
+
+  </div>
+  <div class="foot">Recurso 2 · Log de Defectos · PSP Escenario 3</div>
+</div><!-- /#page-recurso2 -->
+
+<script>
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  event.currentTarget.classList.add('active');
+  window.scrollTo(0, 0);
+}
+</script>
+</body>
+</html>
